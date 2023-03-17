@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-03-17 20:22:39
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-03-17 20:44:05
+# @Last Modified time: 2023-03-17 21:44:27
 
 
 import contextlib
@@ -25,16 +25,16 @@ class Cache(object):
     Args:
     --------
         path (str, optional): Cache Data Directory Path. Defaults to '.'.
-        name (str, optional): Cache Data Directory Name. Defaults to "cache".
+        name (str, optional): Cache Data Directory Name. Defaults to "data".
 
     Usages:
     --------
             Initialization
             >>> import pandas as pd
-            >>> cache: Cache = Cache(path='.', name='temp')
+            >>> cache: Cache = Cache(path='.', name='data')
 
             Check file existence
-            >>> cache.check_file(file_path='./cache/test.csv')
+            >>> cache.check_file(file_path='./data/test.csv')
 
             Cache data
             >>> df: pd.DataFrame = cache.data(
@@ -48,7 +48,7 @@ class Cache(object):
             >>> print(df)
     """
 
-    def __init__(self, path: str = ".", name: str = "temp") -> None:
+    def __init__(self, path: str = ".", name: str = "data") -> None:
         # Construct cache path
         self.cache_path: str = f"{path}//{name}"
 
@@ -119,7 +119,7 @@ class Cache(object):
 def try_read_cached_data(
     cache_instance: Cache, func: Callable[..., pd.DataFrame], file_name: str
 ) -> pd.DataFrame:
-    """Try to read cached data
+    """Try to read cached data.
     --------
 
     Args:

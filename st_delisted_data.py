@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-03-17 20:35:37
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-03-17 20:50:40
+# @Last Modified time: 2023-03-17 21:46:26
 
 
 from typing import List
@@ -17,7 +17,7 @@ ic.configureOutput(prefix="")
 
 
 class Settings(object):
-    """Settings class"""
+    """Settings class."""
 
     # datetime that needs to be disposed after delisted
     delete_date_range_after_delisted: dict[str, int] = {
@@ -30,7 +30,7 @@ class Settings(object):
 
 class STData(object):
     """
-    ST Data Preprocessing
+    ST Data Preprocessing.
     --------
 
     Args:
@@ -48,7 +48,7 @@ class STData(object):
     Usages:
     --------
         >>> import pandas as pd  ⬇ Your ST Data File (No Missing Values)
-        >>> df_st = pd.read_csv("./data/ST.csv")
+        >>> df_st = pd.read_csv("./data/st.csv")
                  ⬇ Make sure your columns are in order!
                stock        date  trade_state
             0      1  2013/10/18            1
@@ -94,41 +94,38 @@ class STData(object):
         # trade_state
         self.df_st["is_st"] = self.df_st["trade_state"] != 1
         self.df_st.drop(columns="trade_state", inplace=True)
-        # columns in turn
-        self.df_st.columns = ["stock", "date", "is_st"]
-        # sort index
-        self.df_st = self.df_st.sort_values(by=["stock", "date"])
+        # sort values
+        self.df_st: pd.DataFrame = self.df_st.sort_values(by=["stock", "date"])
 
 
 class ListedData(object):
     """
-        Listed and Delisted Data Preprocessing
-        --------
-    print()
-        Args:
-        --------
-            df_listed (DataFrame): Listed and Delisted DataFrame.
-            listed_columns (List[str]): Columns in order. Defaults to ["stock", "listed_date", "delisted_date"].
+    Listed and Delisted Data Preprocessing.
+    --------
+    Args:
+    --------
+        df_listed (DataFrame): Listed and Delisted DataFrame.
+        listed_columns (List[str]): Columns in order. Defaults to ["stock", "listed_date", "delisted_date"].
 
-        ValueError: Make sure your data meets the requirements!
-        --------
-            1. Check whether the columns are in the correct order. ⭐️
-            2. Check for duplicates.
-            3. ...
+    ValueError: Make sure your data meets the requirements!
+    --------
+        1. Check whether the columns are in the correct order. ⭐️
+        2. Check for duplicates.
+        3. ...
 
-        Usages:
-        --------
-            >>> import pandas as pd  ⬇ Your Listed and Delisted Data File
-            >>> df_listed = pd.read_csv("./data/listed_delisted_date.csv")
-                     ⬇ Make sure your columns are in order!
-                   stock  listed_date  delisted_date
-                0      1   2013/10/18     2019/11/11
-                1      2   2009/12/13            NaN
-            >>> df_listed: pd.DataFrame = ListedData(
-            ... df_listed=df_listed, ⬇ Make sure your columns are in order!
-            ... listed_columns=["stock", "listed_date", "delisted_date"]
-            ... ).df_listed
-            >>> print(df_listed)
+    Usages:
+    --------
+        >>> import pandas as pd  ⬇ Your Listed and Delisted Data File
+        >>> df_listed = pd.read_csv("./data/listed_delisted_date.csv")
+                 ⬇ Make sure your columns are in order!
+               stock  listed_date  delisted_date
+            0      1   2013/10/18     2019/11/11
+            1      2   2009/12/13            NaN
+        >>> df_listed: pd.DataFrame = ListedData(
+        ... df_listed=df_listed, ⬇ Make sure your columns are in order!
+        ... listed_columns=["stock", "listed_date", "delisted_date"]
+        ... ).df_listed
+        >>> print(df_listed)
     """
 
     def __init__(
@@ -166,15 +163,13 @@ class ListedData(object):
         self.df_listed["delisted_date"] = pd.to_datetime(
             self.df_listed["delisted_date"]
         )
-        # columns in turn
-        self.df_listed.columns = ["stock", "listed_date", "delisted_date"]
-        # sort index
-        self.df_listed = self.df_listed.sort_values(by=["stock"])
+        # sort values
+        self.df_listed: pd.DataFrame = self.df_listed.sort_values(by=["stock"])
 
 
 class Preprocess(object):
     """
-    Delete quarters containing st data and delete data from the first year after listed
+    Delete quarters containing st data and delete data from the first year after listed.
 
     Args:
     --------
@@ -226,7 +221,7 @@ class Preprocess(object):
 
     @property
     def result(self) -> pd.DataFrame:
-        """Data preprocessed"""
+        """Data preprocessed."""
         return try_read_cached_data(
             cache_instance=self.cache,
             func=self.__work,
@@ -234,7 +229,7 @@ class Preprocess(object):
         )
 
     def merge_data(self) -> None:
-        """Merge df_st and df_listed"""
+        """Merge df_st and df_listed."""
         self.df_pre: pd.DataFrame = pd.merge(
             STData(self.cache.data(file_name=self.st_file_name), self.st_columns).df_st,
             ListedData(
@@ -285,7 +280,7 @@ class Preprocess(object):
         ]
 
     def __work(self) -> pd.DataFrame:
-        """Work Function"""
+        """Work Function."""
         self.merge_data()
         self.delete_st_quarter()
         self.delete_first_year()
