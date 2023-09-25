@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-08-17 11:31:58
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-09-25 20:05:35
+# @Last Modified time: 2023-09-25 21:19:40
 """MarketTypeData().df_market_type"""
 
 
@@ -15,8 +15,10 @@ from icecream import ic
 ic.configureOutput(prefix="")
 sys.path.append(str(Path.cwd()))
 from source.modules.setting import Setting
+from source.modules.tools import singleton
 
 
+@singleton
 class MarketTypeData(object):
     """
     Market type data
@@ -29,42 +31,27 @@ class MarketTypeData(object):
 
     Usages:
     --------
-        >>> import pandas as pd
-        >>> df_market_type: pd.DataFrame = MarketTypeData().df_market_type
-        >>> print(df_market_type)
+        ```python
+        import pandas as pd
+        df_market_type: pd.DataFrame = MarketTypeData().df_market_type
+        print(df_market_type)
+        ```
     """
-
-    __instance = None
-    __first_init = True
-
-    def __new__(
-        cls,
-        file_name: str = "market_type.csv",
-        columns: list[str] = ["stock", "market_type"],
-    ):
-        if not cls.__instance:
-            cls.__instance = object.__new__(cls)
-        return cls.__instance
 
     def __init__(
         self,
         file_name: str = "market_type.csv",
         columns: list[str] = ["stock", "market_type"],
     ) -> None:
-        # Singleton mode
-        if self.__first_init:
-            # Read market type data file
-            self.df_market_type: pd.DataFrame = pd.read_csv(
-                f"{Setting.basic_path}/{file_name}"
-            )
-            # Rename columns in order
-            self.df_market_type.columns = columns
-            # Convert data type
-            self.df_market_type = self.df_market_type.astype(
-                {"stock": int, "market_type": int}
-            )
-            # Change the "__first_init" flag to False
-            self.__first_init = False
+        self.df_market_type: pd.DataFrame = pd.read_csv(
+            f"{Setting.basic_path}/{file_name}"
+        )
+        # Rename columns in order
+        self.df_market_type.columns = columns
+        # Convert data type
+        self.df_market_type = self.df_market_type.astype(
+            {"stock": int, "market_type": int}
+        )
 
 
 if __name__ == "__main__":
