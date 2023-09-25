@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-08-17 09:12:59
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-09-25 20:05:42
+# @Last Modified time: 2023-09-25 21:39:53
 
 
 from icecream import ic
@@ -22,10 +22,14 @@ class Setting(object):
     origin_path: str = f"{data_path}/origin"
 
     # 2.1 Basic information of stocks
-    basic_path = f"{origin_path}/basic"
-    
+    basic_path: str = f"{origin_path}/basic"
+
     # 2.2 Macro-indicators
-    macro_path = f"{origin_path}/macro"
+    macro_path: str = f"{origin_path}/macro"
+    
+    # & Sample
+    # Sample start year
+    sample_start_year = 2003
 
 
 if __name__ == "__main__":
