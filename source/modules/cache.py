@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-08-17 09:12:49
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-09-14 15:32:24
+# @Last Modified time: 2023-09-25 19:25:05
 
 
 import sys
@@ -17,7 +17,7 @@ from termcolor import cprint
 ic.configureOutput(prefix="")
 
 sys.path.append(str(Path.cwd()))
-from modules.setting import Setting
+from source.modules.setting import Setting
 
 
 def cp(content: Any, color: Optional[str] = None) -> None:
@@ -80,7 +80,7 @@ class Cache(object):
     def __init__(self, file_path: str, test: bool = True) -> None:
         self.file_path: str = file_path  # User's path
         self.cache_path: Path = Path(
-            f"{Setting.cache_dir}/{file_path}"
+            f"{Setting.data_path}/{file_path}"
         ).resolve()  # Absolute path
         self.test: bool = test
         self.file_type: str | None = None
@@ -147,7 +147,7 @@ class Cache(object):
 class TestCacheData:
     """Test DataFrame"""
 
-    @Cache(file_path="test/test1.csv", test=False)
+    @Cache(file_path="cache/test1.csv", test=False)
     def test_df1(self) -> pd.DataFrame:
         return pd.DataFrame(
             [
