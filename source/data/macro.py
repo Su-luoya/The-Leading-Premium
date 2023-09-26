@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-09-25 21:03:07
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-09-25 21:50:44
+# @Last Modified time: 2023-09-26 14:24:29
 """GDPData().df_gdp"""
 
 
@@ -20,6 +20,28 @@ from source.modules.tools import singleton
 
 @singleton
 class GDPData(object):
+    """
+    GDP data pre-processing
+    ------
+
+    Args:
+    --------
+        file_name (str): GDP data file's name.
+        columns (List[str]): GDP data columns' name. \n
+        Defaults to ["year", "quarter", "GDP", "GDP_1", "GDP_2", "GDP_3"].
+
+    Usages:
+    ------
+        ```python
+        import pandas as pd
+        df_gdp: pd.DataFrame = GDPData(
+            file_name = "gdp.csv",
+            columns = ["year", "quarter", "GDP", "GDP_1", "GDP_2", "GDP_3"]
+            ).df_gdp
+        print(df_gdp)
+        ```
+    """
+
     def __init__(
         self,
         file_name: str = "GDP.csv",
