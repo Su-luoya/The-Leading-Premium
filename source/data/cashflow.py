@@ -2,9 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-09-25 20:36:49
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-09-29 19:39:03
-
-
+# @Last Modified time: 2023-09-29 19:43:36
 """
 df_cashflow = get_cashflow()
 """
@@ -28,7 +26,7 @@ from source.modules.tools import singleton
 def cal_diff(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
     """Calculate difference for given columns in a DataFrame"""
     # Construct a copy of stock and year data
-    df_range = df[["stock", "year"]]
+    df_range: pd.DataFrame = df[["stock", "year"]]
     df_range["start_year"] = df_range["year"]
     df_range["end_year"] = df_range["year"] + 1
     # Search for the start year and end year for stocks
@@ -37,22 +35,30 @@ def cal_diff(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
         .agg({"start_year": min, "end_year": max})
         .reset_index()
     )
-    # Construct year-quarter time series for all stocks
-    df_range = df_range[["stock", "start_year", "end_year"]].apply(
-        lambda row: pd.DataFrame(
-            {
-                "stock": [row["stock"]] * (row["end_year"] - row["start_year"]) * 5,
-                "year": list(np.repeat(range(row["start_year"], row["end_year"]), 5)),
-                # Include `quarter=0`
-                "quarter": [0, 1, 2, 3, 4] * (row["end_year"] - row["start_year"]),
-            }
-        ),  # type: ignore
-        axis=1,
-    )
     # Merge year-quarter time series of all stocks with the origin EBIT/EBITDA data
     df = pd.merge(
         df,
-        pd.concat(df_range.to_list()),
+        pd.concat(
+            # Construct year-quarter time series for all stocks
+            df_range[["stock", "start_year", "end_year"]]
+            .apply(
+                lambda row: pd.DataFrame(
+                    {
+                        "stock": [row["stock"]]
+                        * (row["end_year"] - row["start_year"])
+                        * 5,
+                        "year": list(
+                            np.repeat(range(row["start_year"], row["end_year"]), 5)
+                        ),
+                        # Include `quarter=0`
+                        "quarter": [0, 1, 2, 3, 4]
+                        * (row["end_year"] - row["start_year"]),
+                    }
+                ),  # type: ignore
+                axis=1,
+            )
+            .to_list()
+        ),
         on=["stock", "year", "quarter"],
         how="outer",
     ).sort_values(by=["stock", "year", "quarter"])
