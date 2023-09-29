@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-09-25 20:36:49
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-09-28 21:20:35
+# @Last Modified time: 2023-09-29 17:48:41
 
 
 """
@@ -70,38 +70,38 @@ class EBITDA(object):
         # Calculate difference of EBIT & EBITDA
         self.diff()
 
-    def year_quarter_generator(self, stock, start_year, end_year):
-        quarter_number = (end_year - start_year) * 5
-        return pd.DataFrame(
-            {
-                "stock": [stock] * quarter_number,
-                "year": list(range(start_year, end_year)) * 5,
-                "quarter": [0, 1, 2, 3, 4] * (end_year - start_year),
-            }
-        )
-
     def diff(self) -> None:
         """Calculate difference of EBIT & EBITDA"""
+        # Construct a copy of stock and year data
         df_range = self.df_ebitda[["stock", "year"]]
         df_range["start_year"] = df_range["year"]
         df_range["end_year"] = df_range["year"] + 1
+        # Search for the start year and end year for stocks
         df_range = (
             df_range.groupby("stock")[["start_year", "end_year"]]
             .agg({"start_year": min, "end_year": max})
             .reset_index()
         )
+        # Construct year-quarter time series for all stocks
         df_range = df_range[["stock", "start_year", "end_year"]].apply(
-            lambda row: self.year_quarter_generator(
-                row["stock"], row["start_year"], row["end_year"]
+            lambda row: pd.DataFrame(
+                {
+                    "stock": [row["stock"]] * (row["end_year"] - row["start_year"]) * 5,
+                    "year": list(range(row["start_year"], row["end_year"])) * 5,
+                    # Conclude `quarter=0`
+                    "quarter": [0, 1, 2, 3, 4] * (row["end_year"] - row["start_year"]),
+                }
             ),  # type: ignore
             axis=1,
         )
+        # Merge year-quarter time series of all stocks with the origin EBIT/EBITDA data
         self.df_ebitda = pd.merge(
             self.df_ebitda,
             pd.concat(df_range.to_list()),
             on=["stock", "year", "quarter"],
             how="outer",
         ).sort_values(by=["stock", "year", "quarter"])
+        # Calculate difference of EBIT and EBITDA data
         self.df_ebitda.loc[
             self.df_ebitda["quarter"] == 0,
             self.columns,
@@ -109,9 +109,8 @@ class EBITDA(object):
         self.df_ebitda[self.columns] = self.df_ebitda.groupby(["stock", "year"])[
             self.columns
         ].diff()
+        # Delete `quarter==0`
         self.df_ebitda = self.df_ebitda[self.df_ebitda["quarter"] != 0]
-        self.df_ebitda.to_csv("test.csv", index=False)
-        ic(self.df_ebitda)
 
 
 if __name__ == "__main__":
