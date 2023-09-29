@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-08-17 09:12:59
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-09-26 14:27:30
+# @Last Modified time: 2023-09-29 18:54:21
 
 
 from icecream import ic
@@ -16,7 +16,7 @@ class Setting(object):
     data_path: str = "data"
 
     # 1. The name of directory where the cached data is located
-    cache_path: str = f"{data_path}/cache"
+    cache_path: str = "cache"
 
     # 2. The name of directory where original data is located
     origin_path: str = f"{data_path}/origin"
