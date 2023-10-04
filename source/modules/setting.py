@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-08-17 09:12:59
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-09-29 18:54:21
+# @Last Modified time: 2023-10-04 21:44:13
 
 
 from icecream import ic
@@ -33,6 +33,10 @@ class Setting(object):
     # & Sample
     # Sample start year
     sample_start_year = 2003
+    # Window period and shift period
+    window_period: int = 20
+    shift_period: int = 4
+    sample_periods: int = shift_period * 2 + window_period + 1
 
 
 if __name__ == "__main__":

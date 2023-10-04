@@ -2,8 +2,12 @@
 # @Author: 昵称有六个字
 # @Date:   2023-08-17 11:31:58
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-04 21:08:26
-"""MarketTypeData().df_market_type"""
+# @Last Modified time: 2023-10-04 21:49:14
+"""
+MarketTypeData().df_market_type
+ListedDelistedDate().df_listed
+df_industry = get_industry_classification()
+"""
 
 
 import sys
@@ -51,10 +55,6 @@ class ListedDelistedDate(object):
         self.df_listed["delisted_date"] = pd.to_datetime(
             self.df_listed["delisted_date"]
         )
-        # # Fill nan values
-        # self.df_listed["delisted_date"] = self.df_listed["delisted_date"].fillna(
-        #     pd.Timestamp("now").floor("D")
-        # )
 
 
 @singleton
@@ -99,7 +99,7 @@ class IndustryClassification(object):
             ),
             columns=["date"],
         )
-        # Generate year and quarter
+        # Generate `year` and `quarter` columns
         df_dummy["year"] = df_dummy["date"].dt.year
         df_dummy["quarter"] = df_dummy["date"].dt.quarter
         # Merge and return data
@@ -108,11 +108,11 @@ class IndustryClassification(object):
         )
 
     def dummy_year_quarter_generator(self) -> None:
-        """Year and Quarter Generator."""
-        # Generate year and quarter
+        """Year and Quarter Generator"""
+        # Generate `year` and `quarter` columns
         self.df_industry["year"] = self.df_industry["implement_date"].dt.year
         self.df_industry["quarter"] = self.df_industry["implement_date"].dt.quarter
-        # Generate fake quarter data
+        # Generate dummy year-quarter data
         self.df_industry = (
             self.df_industry.groupby("stock")
             .apply(lambda df: self.dummy_year_quarter_func(df))
@@ -121,7 +121,7 @@ class IndustryClassification(object):
             .drop(columns="level_1")
             .sort_values(by=["stock", "year", "quarter"])
         )
-        # Forward fill nan
+        # Forward fill nan `industry_code`
         self.df_industry[["industry_code"]] = self.df_industry.groupby("stock")[
             ["industry_code"]
         ].ffill()

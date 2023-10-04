@@ -232,7 +232,7 @@ class Cashflow(object):
 
 
 @Cache(file_path=f"{Setting.cache_path}/cashflow.csv", test=False)
-def get_cashflow() -> pd.DataFrame:
+def get_cashflow():
     """Different measures of cashflow"""
     return (
         EBITDA()
