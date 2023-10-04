@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-09-25 20:36:49
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-09-29 19:43:36
+# @Last Modified time: 2023-10-04 20:33:32
 """
 df_cashflow = get_cashflow()
 """
@@ -51,7 +51,7 @@ def cal_diff(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
                             np.repeat(range(row["start_year"], row["end_year"]), 5)
                         ),
                         # Include `quarter=0`
-                        "quarter": [0, 1, 2, 3, 4]
+                        "quarter": list(range(5))
                         * (row["end_year"] - row["start_year"]),
                     }
                 ),  # type: ignore
@@ -73,8 +73,8 @@ def cal_diff(df: pd.DataFrame, columns: list[str]) -> pd.DataFrame:
 
 
 @singleton
-class EBITDAData(object):
-    """EBITDA and EBIT data"""
+class EBITDA(object):
+    """EBITDA and EBIT (quarterly)"""
 
     def __init__(
         self,
@@ -119,8 +119,12 @@ class EBITDAData(object):
 
 
 @singleton
-class IncomeData(object):
-    """Income statement data"""
+class Income(object):
+    """
+    Income statement (quarterly)
+    ------
+    total_operating_income, operating_income, operating_profit, total_profit, net_profit
+    """
 
     def __init__(
         self,
@@ -173,8 +177,12 @@ class IncomeData(object):
 
 
 @singleton
-class CashflowData(object):
-    """Cashflow statement data"""
+class Cashflow(object):
+    """
+    Cashflow statement
+    ------
+    operating_cashflow, investing_cashflow, financing_cashflow, cash_increase
+    """
 
     def __init__(
         self,
@@ -227,14 +235,14 @@ class CashflowData(object):
 def get_cashflow() -> pd.DataFrame:
     """Different measures of cashflow"""
     return (
-        EBITDAData()
+        EBITDA()
         .df_ebitda.merge(
-            IncomeData().df_income,
+            Income().df_income,
             on=["stock", "year", "quarter"],
             how="outer",
         )
         .merge(
-            CashflowData().df_cashflow,
+            Cashflow().df_cashflow,
             on=["stock", "year", "quarter"],
             how="outer",
         )
