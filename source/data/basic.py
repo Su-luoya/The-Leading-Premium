@@ -2,10 +2,11 @@
 # @Author: 昵称有六个字
 # @Date:   2023-08-17 11:31:58
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-05 14:28:03
+# @Last Modified time: 2023-10-05 15:05:17
 """
 MarketType().df_market_type \n
 ListedDelistedDate().df_listed \n
+AnnotationDate().df_anno \n
 df_industry = get_industry_classification()
 """
 
@@ -55,6 +56,22 @@ class ListedDelistedDate(object):
         self.df_listed["delisted_date"] = pd.to_datetime(
             self.df_listed["delisted_date"]
         )
+
+
+@singleton
+class AnnotationDate(object):
+    def __init__(
+        self,
+        file_name: str = "annotation_date.csv",
+        columns: list[str] = ["stock", "year", "quarter", "annotation_date"],
+    ) -> None:
+        self.df_anno = pd.read_csv(f"{Setting.basic_path}/{file_name}")
+        self.df_anno.columns = columns
+        self.df_anno = self.df_anno.astype({"stock": int, "year": int, "quarter": int})
+        self.df_anno["annotation_date"] = pd.to_datetime(
+            self.df_anno["annotation_date"]
+        )
+        self.df_anno = self.df_anno[self.df_anno["year"] >= Setting.sample_start_year]
 
 
 @singleton
@@ -139,7 +156,9 @@ if __name__ == "__main__":
     # ic(df_market)
     # df_listed = ListedDelistedDate().df_listed
     # ic(df_listed)
+    df_anno = AnnotationDate().df_anno
+    ic(df_anno)
     # df_industry = IndustryClassification().df_industry
     # ic(df_industry)
-    df_industry = get_industry_classification()
-    ic(df_industry)
+    # df_industry = get_industry_classification()
+    # ic(df_industry)
