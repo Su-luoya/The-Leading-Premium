@@ -2,14 +2,14 @@
 # @Author: 昵称有六个字
 # @Date:   2023-10-04 21:21:31
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-04 22:02:48
+# @Last Modified time: 2023-10-05 14:24:18
 
 
 import sys
 from pathlib import Path
 from typing import Any
-import numpy as np
 
+import numpy as np
 import pandas as pd
 from icecream import ic
 
@@ -27,7 +27,7 @@ class Sample(object):
     (20+4*2+1)-quarters-window for a sample period
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Merge cashflow data and industry classification data
         self.df_cash = pd.merge(
             get_cashflow(),  # type: ignore
@@ -45,7 +45,7 @@ class Sample(object):
             "year_quarter"
         ].unique()
 
-    def get_sample(self):
+    def get_samples(self):
         """
         Sample Generator
         ------
@@ -68,18 +68,8 @@ class Sample(object):
                 ].drop(columns="year_quarter"),
             }
 
-    @property
-    def test_sample(self) -> dict[str, pd.Period | pd.DataFrame]:
-        """
-        Test sample of `df_cash`
-        --------
-
-        Returns:
-        --------
-            >>> {"quarter" : Period('2009Q1', 'Q-DEC'), "df_cash" : pd.DataFrame}
-        """
-        return next(self.get_sample())
-
 
 if __name__ == "__main__":
-    ic(Sample().test_sample)
+    samples = Sample().get_samples()
+    ic(next(samples))
+    ic(next(samples))
