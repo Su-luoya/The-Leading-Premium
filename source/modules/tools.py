@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-09-25 21:06:44
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-09-25 21:14:53
+# @Last Modified time: 2023-10-05 15:33:07
 
 
 import sys
@@ -54,3 +54,12 @@ def singleton(cls):
         return instances[cls]
 
     return get_instance
+
+
+class Window(object):
+    def __init__(self, period, df) -> None:
+        self.period = period
+        self.df = df
+
+    def __repr__(self) -> str:
+        return f"Period:{self.period}, Stock Number:{len(self.df['stock'].unique())}, Industry Number:{len(self.df['industry_code'].unique())}"

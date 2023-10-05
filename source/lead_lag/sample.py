@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-10-04 21:21:31
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-05 14:28:11
+# @Last Modified time: 2023-10-05 15:31:42
 
 
 import sys
@@ -15,10 +15,15 @@ from icecream import ic
 
 ic.configureOutput(prefix="")
 sys.path.append(str(Path.cwd()))
-from source.data.basic import MarketType, get_industry_classification
+from source.data.basic import (
+    MarketType,
+    ListedDelistedDate,
+    AnnotationDate,
+    get_industry_classification,
+)
 from source.data.cashflow import get_cashflow
 from source.modules.setting import Setting
-from source.modules.tools import singleton
+from source.modules.tools import singleton, Window
 
 
 @singleton
@@ -52,8 +57,8 @@ class Sample(object):
 
         Returns:
         ------
-            >>> {"quarter" : Period('2010Q1', 'Q-DEC'), "df_cash" : pd.DataFrame}, 
-            >>> {"quarter" : Period('2010Q1', 'Q-DEC'), "df_cash" : pd.DataFrame}, 
+            >>> {"quarter" : Period('2010Q1', 'Q-DEC'), "df_cash" : pd.DataFrame},
+            >>> {"quarter" : Period('2010Q1', 'Q-DEC'), "df_cash" : pd.DataFrame},
             >>> ...
         """
         for period_index in filter(
@@ -63,15 +68,18 @@ class Sample(object):
                 for i in range(len(self.period_range))
             ],
         ):
-            yield {
-                "quarter": period_index[-1],
-                "df_cash": self.df_cash[
-                    self.df_cash["year_quarter"].isin(period_index)
-                ].drop(columns="year_quarter"),
-            }
+            yield Window(
+                period=period_index[-1],
+                df=self.df_cash[self.df_cash["year_quarter"].isin(period_index)].drop(
+                    columns="year_quarter"
+                ),
+            )
 
 
 if __name__ == "__main__":
     samples = Sample().get_samples()
-    ic(next(samples))
-    ic(next(samples))
+    window1 = next(samples)
+    window2 = next(samples)
+    ic(window1)
+    ic(window2)
+

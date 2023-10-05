@@ -1,5 +1,6 @@
 /data/
-__pycache__/
+__pycache__
 test.csv
-**/.DS_Store
-**/.pyc
+.DS_Store
+.pyc
+.vscode
