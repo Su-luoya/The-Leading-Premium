@@ -2,10 +2,10 @@
 # @Author: 昵称有六个字
 # @Date:   2023-09-25 21:03:07
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-04 20:31:22
+# @Last Modified time: 2023-10-05 14:28:21
 """
-GDPData().df_gdp
-RFRData().df_rfr
+GDPData().df_gdp \n
+RFRData().df_rfr \n
 InflationData().df_inflation
 """
 

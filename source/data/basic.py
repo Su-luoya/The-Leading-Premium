@@ -2,10 +2,10 @@
 # @Author: 昵称有六个字
 # @Date:   2023-08-17 11:31:58
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-04 21:49:14
+# @Last Modified time: 2023-10-05 14:28:03
 """
-MarketTypeData().df_market_type
-ListedDelistedDate().df_listed
+MarketType().df_market_type \n
+ListedDelistedDate().df_listed \n
 df_industry = get_industry_classification()
 """
 

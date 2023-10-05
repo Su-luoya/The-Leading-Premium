@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-10-04 21:21:31
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-05 14:24:18
+# @Last Modified time: 2023-10-05 14:28:11
 
 
 import sys
@@ -15,7 +15,7 @@ from icecream import ic
 
 ic.configureOutput(prefix="")
 sys.path.append(str(Path.cwd()))
-from source.data.basic import get_industry_classification
+from source.data.basic import MarketType, get_industry_classification
 from source.data.cashflow import get_cashflow
 from source.modules.setting import Setting
 from source.modules.tools import singleton
@@ -52,7 +52,9 @@ class Sample(object):
 
         Returns:
         ------
-            >>> {"quarter" : Period('2010Q1', 'Q-DEC'), "df_cash" : pd.DataFrame}, ...
+            >>> {"quarter" : Period('2010Q1', 'Q-DEC'), "df_cash" : pd.DataFrame}, 
+            >>> {"quarter" : Period('2010Q1', 'Q-DEC'), "df_cash" : pd.DataFrame}, 
+            >>> ...
         """
         for period_index in filter(
             lambda x: len(x) >= Setting.sample_periods,
