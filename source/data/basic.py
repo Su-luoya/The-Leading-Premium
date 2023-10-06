@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-08-17 11:31:58
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-05 15:05:17
+# @Last Modified time: 2023-10-05 17:03:35
 """
 MarketType().df_market_type \n
 ListedDelistedDate().df_listed \n
@@ -26,6 +26,16 @@ from source.modules.tools import singleton
 
 @singleton
 class MarketType(object):
+    """
+    1=上证A股市场 (不包含科创板）\n
+    2=上证B股市场\n
+    4=深证A股市场（不包含创业板）\n
+    8=深证B股市场\n
+    16=创业板\n
+    32=科创板\n
+    64=北证A股市场
+    """
+
     def __init__(
         self,
         file_name: str = "market_type.csv",
@@ -55,6 +65,9 @@ class ListedDelistedDate(object):
         self.df_listed["listed_date"] = pd.to_datetime(self.df_listed["listed_date"])
         self.df_listed["delisted_date"] = pd.to_datetime(
             self.df_listed["delisted_date"]
+        )
+        self.df_listed["listed_year_quarter"] = self.df_listed["listed_date"].map(
+            lambda x: pd.Period(x, freq="Q")
         )
 
 
@@ -150,14 +163,13 @@ def get_industry_classification():
 
 
 if __name__ == "__main__":
-    # df_market = MarketType(
-    #     # file_name="market_type.csv", columns=["stock", "market_type"]
-    # ).df_market_type
-    # ic(df_market)
-    # df_listed = ListedDelistedDate().df_listed
-    # ic(df_listed)
-    df_anno = AnnotationDate().df_anno
-    ic(df_anno)
+    ...
+    # df_market = MarketType().df_market_type
+    # ic(df_market["market_type"].unique())
+    df_listed = ListedDelistedDate().df_listed
+    ic(df_listed)
+    # df_anno = AnnotationDate().df_anno
+    # ic(df_anno)
     # df_industry = IndustryClassification().df_industry
     # ic(df_industry)
     # df_industry = get_industry_classification()

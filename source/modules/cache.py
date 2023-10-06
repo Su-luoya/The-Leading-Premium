@@ -2,8 +2,11 @@
 # @Author: 昵称有六个字
 # @Date:   2023-08-17 09:12:49
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-09-25 19:25:05
-
+# @Last Modified time: 2023-10-05 16:06:14
+'''
+cp() \n
+@Cache(file_path="test.csv", test=False)
+'''
 
 import sys
 from pathlib import Path

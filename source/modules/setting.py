@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-08-17 09:12:59
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-04 21:44:13
+# @Last Modified time: 2023-10-06 14:42:43
 
 
 from icecream import ic
@@ -26,10 +26,10 @@ class Setting(object):
 
     # 2.2 Macro-indicators
     macro_path: str = f"{origin_path}/macro"
-    
+
     # 2.3 Cash flow
     cashflow_path: str = f"{origin_path}/cashflow"
-    
+
     # & Sample
     # Sample start year
     sample_start_year = 2003
@@ -37,6 +37,33 @@ class Setting(object):
     window_period: int = 20
     shift_period: int = 4
     sample_periods: int = shift_period * 2 + window_period + 1
+    # Market type: 1=上证A股市场 (不包含科创板），2=上证B股市场，4=深证A股市场（不包含创业板），8=深证B股市场，16=创业板， 32=科创板，64=北证A股市场
+    market_list: list[int] = [1, 4]
+    # Annotation delay max periods
+    delay_max_period = 1
+    # Balance panel or not
+    is_balance_panel = False
+
+    # & Cashflow Measures
+    # EBIT, EBITDA, EBIT(TTM) or EBITDA(TTM)?
+    ebitda_columns = ["EBIT", "EBIT(TTM)", "EBITDA", "EBITDA(TTM)"]
+    # Income statement
+    income_columns: list[str] = [
+        "total_operating_income",
+        "operating_income",
+        "operating_profit",
+        "total_profit",
+        "net_profit",
+    ]
+    # Cashflow statement
+    cashflow_columns: list[str] = [
+        "operating_cashflow",
+        "investing_cashflow",
+        "financing_cashflow",
+        "cash_increase",
+    ]
+    # Conclude
+    cashflow_measures = ebitda_columns + income_columns + cashflow_columns
 
 
 if __name__ == "__main__":
