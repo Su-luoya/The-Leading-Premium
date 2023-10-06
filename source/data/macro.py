@@ -2,11 +2,11 @@
 # @Author: 昵称有六个字
 # @Date:   2023-09-25 21:03:07
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-05 14:28:21
+# @Last Modified time: 2023-10-06 15:23:00
 """
-GDPData().df_gdp \n
-RFRData().df_rfr \n
-InflationData().df_inflation
+GDP().df_gdp \n
+RFR().df_rfr \n
+Inflation().df_inflation
 """
 
 
@@ -34,9 +34,7 @@ class GDP(object):
         columns: list[str] = ["year", "quarter", "GDP", "GDP_1", "GDP_2", "GDP_3"],
     ) -> None:
         self.df_gdp: pd.DataFrame = pd.read_csv(f"{Setting.macro_path}/{file_name}")
-        # Rename columns in order
         self.df_gdp.columns = columns
-        # Convert data type
         self.df_gdp = self.df_gdp.astype(
             {
                 "year": int,
@@ -47,8 +45,10 @@ class GDP(object):
                 "GDP_3": int,
             }
         )
-        # Set start year
         self.df_gdp = self.df_gdp[self.df_gdp["year"] >= Setting.sample_start_year]
+        self.df_gdp = self.df_gdp[["year", "quarter", Setting.gdp_column]].rename(
+            columns={Setting.gdp_column: "GDP"}
+        )
 
 
 @singleton
@@ -92,6 +92,10 @@ class Inflation(object):
         self.df_inflation = self.df_inflation[
             self.df_inflation["year"] >= Setting.sample_start_year
         ]
+        self.df_inflation: pd.DataFrame = self.df_inflation[
+            ["year", "quarter", Setting.price_index]
+        ].rename(columns={Setting.price_index: "inflation"})
+        self.df_inflation['inflation'] = self.df_inflation['inflation']/100
 
 
 if __name__ == "__main__":

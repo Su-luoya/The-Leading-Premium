@@ -2,10 +2,15 @@
 # @Author: 昵称有六个字
 # @Date:   2023-10-04 21:21:31
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-06 14:54:35
+# @Last Modified time: 2023-10-06 19:06:35
 """
-Sample().get_samples()
+OriginalSample().get_samples()
 Delete(window=next(samples)).cashflow_window
+samples = Samples()
+sample = next(samples)
+sample.df_dict
+sample.period
+sample.cashflow_columns
 """
 
 import sys
@@ -25,13 +30,16 @@ from source.data.basic import (
     get_industry_classification,
 )
 from source.data.cashflow import get_cashflow
+from source.data.macro import GDP
+from source.lead_lag.adjust import Adjust
 from source.modules.cache import Cache, cp
 from source.modules.setting import Setting
-from source.modules.tools import CashflowWindow, Window, singleton
+from source.modules.tools import singleton
+from source.modules.structure import LLWindow, CashflowWindow, Window
 
 
 @singleton
-class Sample(object):
+class OriginalSample(object):
     """
     Generator for (20+4*2+1)-quarters-window of a sample period
     """
@@ -208,17 +216,51 @@ class Delete(object):
                 )
 
 
+@singleton
+class Samples(object):
+    """
+    ```python
+    # Method 1
+    samples = Samples()
+    ic(next(samples))
+    ic(next(samples))
+    # Method 2
+    for sample in Samples():
+        ic(sample)
+    ```
+    """
+
+    def __init__(self) -> None:
+        self.windows = OriginalSample().get_samples()
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        return LLWindow(
+            cashflow_window=Delete(window=next(self.windows)).cashflow_window,
+            df_gdp=GDP().df_gdp,
+        )
+
+
 if __name__ == "__main__":
-    samples = Sample().get_samples()
+    # samples = OriginalSample().get_samples()
     # window1 = next(samples)
     # window2 = next(samples)
     # ic(type(window1.period))
     # ic(window2.period)
     # for sample in samples:
     #     ic(sample)
-    cashflow_window = Delete(window=next(samples)).cashflow_window
+    # cashflow_window = Delete(window=next(samples)).cashflow_window
     # for sample in samples:
     #     cashflow_window = Delete(window=sample).cashflow_window
     #     ic(cashflow_window)
     # delete = Delete(window=next(samples))
     # ic(delete.window)
+    samples = Samples()
+    sample = next(samples)
+    ic(sample)
+    sample = next(samples)
+    ic(sample.df_dict)
+    # for sample in Samples():
+    #     ic(sample)

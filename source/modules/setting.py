@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-08-17 09:12:59
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-06 14:42:43
+# @Last Modified time: 2023-10-06 15:14:15
 
 
 from icecream import ic
@@ -43,6 +43,10 @@ class Setting(object):
     delay_max_period = 1
     # Balance panel or not
     is_balance_panel = False
+    # Inflation Adjust: CPI or PPI
+    price_index: str = 'CPI'
+    # GDP column: "GDP", "GDP_1", "GDP_2", "GDP_3"
+    gdp_column: str = "GDP"
 
     # & Cashflow Measures
     # EBIT, EBITDA, EBIT(TTM) or EBITDA(TTM)?

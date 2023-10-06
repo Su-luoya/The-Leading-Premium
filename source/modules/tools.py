@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-09-25 21:06:44
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-06 14:33:36
+# @Last Modified time: 2023-10-06 19:05:20
 """
 @singleton()
 Window(period, df)
@@ -17,6 +17,7 @@ import pandas as pd
 ic.configureOutput(prefix="")
 sys.path.append(str(Path.cwd()))
 from source.modules.setting import Setting
+
 
 
 def singleton(cls):
@@ -60,56 +61,7 @@ def singleton(cls):
     return get_instance
 
 
-class Window(object):
-    """
-    (20+4*2+1)-quarters-window for a sample period
-    ------
-
-    Args:
-    ------
-        period: The sample period.
-        df: The cashflow data.
-    """
-
-    def __init__(self, period: pd.Period, df: pd.DataFrame) -> None:
-        self.period: pd.Period = period
-        self.df: pd.DataFrame = df
-
-    def __repr__(self) -> str:
-        return str(
-            {
-                str(self.period): {
-                    "Observation": len(self.df),
-                    "Stock": len(self.df["stock"].unique()),
-                    "Industry": len(self.df["industry_code"].unique()),
-                }
-            }
-        )
 
 
-class CashflowWindow(object):
-    """window for a specific cashflow column"""
 
-    def __init__(self, window: Window, cashflow_columns: list[str]) -> None:
-        self.cashflow_columns: list[str] = cashflow_columns
-        self.period = window.period
-        self.window: dict[str, pd.DataFrame] = {}
-        for cashflow_column in self.cashflow_columns:
-            self.window[cashflow_column] = window.df[
-                ["stock", "year", "quarter", "industry_code", cashflow_column]
-            ]
 
-    def __repr__(self):
-        return f"Window: {self.period}\n" + str(
-            pd.DataFrame(
-                {
-                    cashflow_column: [
-                        len(df),
-                        len(df["stock"].unique()),
-                        len(df["industry_code"].unique()),
-                    ]
-                    for cashflow_column, df in self.window.items()
-                },
-                index=["Observation", "Stock", "Industry"],
-            ).T
-        )
