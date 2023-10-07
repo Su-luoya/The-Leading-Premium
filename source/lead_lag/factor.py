@@ -2,10 +2,10 @@
 # @Author: 昵称有六个字
 # @Date:   2023-09-15 16:28:50
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-07 15:00:20
-'''
+# @Last Modified time: 2023-10-07 15:28:57
+"""
 Factor().lead_lag() \n
-'''
+"""
 
 import sys
 from pathlib import Path
@@ -14,7 +14,6 @@ from time import time
 import numpy as np
 import pandas as pd
 from icecream import ic
-from tqdm import tqdm
 
 ic.configureOutput(prefix="")
 sys.path.append(str(Path.cwd()))
@@ -24,7 +23,6 @@ from source.lead_lag.sample import Samples
 from source.modules.cache import Cache, cp
 from source.modules.setting import Setting
 from source.modules.structure import LLWindow
-from source.modules.tools import singleton
 
 
 class LeadLag(object):
@@ -189,7 +187,8 @@ class LeadLag(object):
 
 
 class Factor(object):
-    '''Lead and Lag Factor'''
+    """Lead and Lag Factor"""
+
     @Cache(file_path=f"{Setting.cache_path}/lead_lag.csv", test=False)
     def lead_lag(self) -> pd.DataFrame:
         t_all: float = time()
@@ -216,10 +215,29 @@ class Factor(object):
         return pd.concat(ll_list)
 
 
+class LLFactor(object):
+    def __init__(self, cashflow=None, measure=None) -> None:
+        if cashflow is not None and measure is not None:
+            self.df_factor = (
+                Factor()  # type:ignore
+                .lead_lag()[
+                    [
+                        "period",
+                        "industry_code",
+                        f"{measure}({cashflow})",
+                    ]
+                ]
+                .dropna()
+            )
+        else:
+            raise ValueError("`cashflow` and `measure` must be not None")
+
+
 if __name__ == "__main__":
     # samples = Samples()
     # ll = LeadLag(next(samples))
     # ll.factor()
     # ic(ll.sample.df_dict["EBITDA"])
     # ic(ll.corr_columns_dict)
-    ic(Factor().lead_lag())
+    df_factor = LLFactor(cashflow="EBITDA", measure="LL_industry").df_factor
+    ic(df_factor)
