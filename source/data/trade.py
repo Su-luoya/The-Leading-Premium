@@ -2,9 +2,9 @@
 # @Author: 昵称有六个字
 # @Date:   2023-10-07 15:43:01
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-07 16:27:56
+# @Last Modified time: 2023-10-07 18:42:17
 """
-df_ret = get_stock_return() \n
+df_ret = StockReturn().df_ret \n
 traded_value, total_value \n
 return_with_dividend, return_without_dividend
 """
@@ -117,24 +117,46 @@ class Ret(object):
         )
 
 
-@Cache(file_path=f"{Setting.cache_path}/stock_return.csv", test=False)
-def get_stock_return():
-    return (
-        Ret()
-        .df_ret[
+class StockReturn(object):
+    def __init__(self, weighting_scheme="traded_value", with_dividend=True) -> None:
+        self.weighting_scheme = weighting_scheme
+        self.with_dividend = with_dividend
+
+    @Cache(file_path=f"{Setting.cache_path}/stock_return.csv", test=False)
+    def get_stock_return(self):
+        return (
+            Ret()
+            .df_ret[
+                [
+                    "stock",
+                    "year",
+                    "quarter",
+                    "month",
+                    "traded_value",
+                    "total_value",
+                    "return_with_dividend",
+                    "return_without_dividend",
+                ]
+            ]
+            .dropna()
+        )
+
+    @property
+    def df_ret(
+        self,
+    ):
+        df_ret = self.get_stock_return()[  # type:ignore
             [
                 "stock",
                 "year",
                 "quarter",
                 "month",
-                "traded_value",
-                "total_value",
-                "return_with_dividend",
-                "return_without_dividend",
+                self.weighting_scheme,
+                f"return_with{'' if self.with_dividend else 'out'}_dividend",
             ]
         ]
-        .dropna()
-    )
+        df_ret.columns = ["stock", "year", "quarter", "month", "size", "return"]
+        return df_ret
 
 
 if __name__ == "__main__":
@@ -144,5 +166,5 @@ if __name__ == "__main__":
     # df_ret = Ret().df_ret
 
     # ic(df_ret)
-    df_ret = get_stock_return()
+    df_ret = StockReturn().df_ret
     ic(df_ret)

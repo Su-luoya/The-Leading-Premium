@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-09-15 16:28:50
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-07 15:28:57
+# @Last Modified time: 2023-10-07 17:00:57
 """
 Factor().lead_lag() \n
 """
@@ -23,6 +23,7 @@ from source.lead_lag.sample import Samples
 from source.modules.cache import Cache, cp
 from source.modules.setting import Setting
 from source.modules.structure import LLWindow
+from source.modules.tools import singleton
 
 
 class LeadLag(object):
@@ -186,8 +187,12 @@ class LeadLag(object):
             ]
 
 
+@singleton
 class Factor(object):
     """Lead and Lag Factor"""
+
+    def __init__(self) -> None:
+        self.df_ll = self.lead_lag()
 
     @Cache(file_path=f"{Setting.cache_path}/lead_lag.csv", test=False)
     def lead_lag(self) -> pd.DataFrame:
@@ -198,10 +203,10 @@ class Factor(object):
             ic(sample)
             ll = LeadLag(sample=sample)
             ll.factor()
-            df_ll = None
+            df_ll = pd.DataFrame()
             for cashflow_column in Setting.cashflow_measures:
-                if df_ll is None:
-                    df_ll = ll.sample.df_dict[cashflow_column]
+                if df_ll.empty:
+                    df_ll: pd.DataFrame = ll.sample.df_dict[cashflow_column]
                 else:
                     df_ll = pd.merge(
                         df_ll,
@@ -220,7 +225,7 @@ class LLFactor(object):
         if cashflow is not None and measure is not None:
             self.df_factor = (
                 Factor()  # type:ignore
-                .lead_lag()[
+                .df_ll[
                     [
                         "period",
                         "industry_code",
@@ -239,5 +244,7 @@ if __name__ == "__main__":
     # ll.factor()
     # ic(ll.sample.df_dict["EBITDA"])
     # ic(ll.corr_columns_dict)
-    df_factor = LLFactor(cashflow="EBITDA", measure="LL_industry").df_factor
-    ic(df_factor)
+    df_factor1 = LLFactor(cashflow="EBITDA", measure="LL_industry").df_factor
+    df_factor2 = LLFactor(cashflow="EBIT", measure="LL_industry").df_factor
+    ic(df_factor1)
+    ic(df_factor2)

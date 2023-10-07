@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-08-17 09:12:59
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-07 16:11:38
+# @Last Modified time: 2023-10-07 18:36:05
 
 
 from icecream import ic
@@ -43,7 +43,7 @@ class Setting(object):
     # Market type: 1=上证A股市场 (不包含科创板），2=上证B股市场，4=深证A股市场（不包含创业板），8=深证B股市场，16=创业板， 32=科创板，64=北证A股市场
     market_list: list[int] = [1, 4]
     # Annotation delay max periods
-    delay_max_period = 1
+    delay_max_period = 2
     # Balance panel or not
     is_balance_panel = False
     # Inflation Adjust: CPI or PPI
@@ -71,6 +71,13 @@ class Setting(object):
     ]
     # Conclude
     cashflow_measures = ebitda_columns + income_columns + cashflow_columns
+
+    # & Empirical Analysis
+    # Shift LL rank to pair return data
+    shift_rank_period: int = delay_max_period
+    # Industry number that lead (lag) portfolio contains
+    lead_group_industry_number: int = 6
+    lag_group_industry_number: int = 6
 
 
 if __name__ == "__main__":
