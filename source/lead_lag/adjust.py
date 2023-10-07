@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-10-06 15:00:24
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-06 18:02:26
+# @Last Modified time: 2023-10-06 19:21:23
 
 
 import sys
@@ -15,7 +15,6 @@ from icecream import ic
 ic.configureOutput(prefix="")
 sys.path.append(str(Path.cwd()))
 from source.data.macro import GDP, Inflation
-# from source.lead_lag.sample import Samples
 
 
 class AdjustFactory(object):

@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-09-25 20:36:49
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-04 20:33:32
+# @Last Modified time: 2023-10-06 19:53:36
 """
 df_cashflow = get_cashflow()
 """
@@ -84,12 +84,12 @@ class EBITDA(object):
             "year",
             "quarter",
             "EBIT",
-            "EBIT(TTM)",
+            "EBIT_TTM",
             "EBITDA",
-            "EBITDA(TTM)",
+            "EBITDA_TTM",
         ],
     ) -> None:
-        cashflow_columns: list[str] = ["EBIT", "EBIT(TTM)", "EBITDA", "EBITDA(TTM)"]
+        cashflow_columns: list[str] = ["EBIT", "EBIT_TTM", "EBITDA", "EBITDA_TTM"]
         # Read EBITDA/EBIT data
         self.df_ebitda: pd.DataFrame = pd.read_csv(
             f"{Setting.cashflow_path}/{file_name}"
@@ -103,9 +103,9 @@ class EBITDA(object):
                 "year": int,
                 "quarter": int,
                 "EBIT": float,
-                "EBIT(TTM)": float,
+                "EBIT_TTM": float,
                 "EBITDA": float,
-                "EBITDA(TTM)": float,
+                "EBITDA_TTM": float,
             }
         )
         # Sort values

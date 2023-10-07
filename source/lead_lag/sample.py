@@ -2,14 +2,14 @@
 # @Author: 昵称有六个字
 # @Date:   2023-10-04 21:21:31
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-06 19:06:35
+# @Last Modified time: 2023-10-06 19:42:27
 """
-OriginalSample().get_samples()
-Delete(window=next(samples)).cashflow_window
-samples = Samples()
-sample = next(samples)
-sample.df_dict
-sample.period
+OriginalSample().get_samples() \n
+Delete(window=next(samples)).cashflow_window \n
+samples = Samples() \n
+sample = next(samples) \n
+sample.df_dict \n
+sample.period \n
 sample.cashflow_columns
 """
 
@@ -31,8 +31,7 @@ from source.data.basic import (
 )
 from source.data.cashflow import get_cashflow
 from source.data.macro import GDP
-from source.lead_lag.adjust import Adjust
-from source.modules.cache import Cache, cp
+from source.modules.cache import cp
 from source.modules.setting import Setting
 from source.modules.tools import singleton
 from source.modules.structure import LLWindow, CashflowWindow, Window
@@ -244,19 +243,6 @@ class Samples(object):
 
 
 if __name__ == "__main__":
-    # samples = OriginalSample().get_samples()
-    # window1 = next(samples)
-    # window2 = next(samples)
-    # ic(type(window1.period))
-    # ic(window2.period)
-    # for sample in samples:
-    #     ic(sample)
-    # cashflow_window = Delete(window=next(samples)).cashflow_window
-    # for sample in samples:
-    #     cashflow_window = Delete(window=sample).cashflow_window
-    #     ic(cashflow_window)
-    # delete = Delete(window=next(samples))
-    # ic(delete.window)
     samples = Samples()
     sample = next(samples)
     ic(sample)

@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-10-06 19:05:00
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-06 19:14:21
+# @Last Modified time: 2023-10-06 21:06:59
 
 
 import sys
@@ -70,7 +70,7 @@ class CashflowWindow(object):
                 index=["Observation", "Stock", "Industry"],
             ).T
         )
-        
+
 
 class LLWindow(object):
     """
@@ -96,7 +96,7 @@ class LLWindow(object):
                 Adjust(df_adjust=df_gdp, adjust_column="GDP").adjust_result,
                 on=["year", "quarter"],
                 how="inner",
-            )
+            ).sort_values(by=["industry_code", "year", "quarter"])
             for cashflow_column, df_cash in cashflow_window.window.items()
         }
 
