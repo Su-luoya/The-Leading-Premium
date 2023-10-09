@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-10-07 16:31:00
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-07 18:55:57
+# @Last Modified time: 2023-10-07 19:31:59
 
 
 import sys
@@ -106,7 +106,7 @@ class TestSample(object):
             .sort_values(["stock", "year", "quarter", "month"])
             .drop(columns="industry_code")
             .set_index(["stock", "year", "quarter", "month"])
-            # .reset_index()
+            .reset_index()
             .rename(columns={self.ll_column: "portfolio"})
         )
 

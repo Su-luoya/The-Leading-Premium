@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-08-17 09:12:59
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-07 18:36:05
+# @Last Modified time: 2023-10-07 20:07:52
 
 
 from icecream import ic
@@ -38,7 +38,7 @@ class Setting(object):
     sample_start_year = 2003
     # Window period and shift period
     window_period: int = 20
-    shift_period: int = 4
+    shift_period: int = 2
     sample_periods: int = shift_period * 2 + window_period + 1
     # Market type: 1=上证A股市场 (不包含科创板），2=上证B股市场，4=深证A股市场（不包含创业板），8=深证B股市场，16=创业板， 32=科创板，64=北证A股市场
     market_list: list[int] = [1, 4]
@@ -47,7 +47,7 @@ class Setting(object):
     # Balance panel or not
     is_balance_panel = False
     # Inflation Adjust: CPI or PPI
-    price_index: str = "CPI"
+    price_index: str = "PPI"
     # GDP column: "GDP", "GDP_1", "GDP_2", "GDP_3"
     gdp_column: str = "GDP"
 
@@ -76,8 +76,8 @@ class Setting(object):
     # Shift LL rank to pair return data
     shift_rank_period: int = delay_max_period
     # Industry number that lead (lag) portfolio contains
-    lead_group_industry_number: int = 6
-    lag_group_industry_number: int = 6
+    lead_group_industry_number: int = 10
+    lag_group_industry_number: int = 10
 
 
 if __name__ == "__main__":

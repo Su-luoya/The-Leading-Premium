@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-10-06 15:00:24
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-06 19:21:23
+# @Last Modified time: 2023-10-07 20:36:30
 
 
 import sys
@@ -73,3 +73,4 @@ if __name__ == "__main__":
     # df_adjust = Adjust(df_adjust, "EBITDA").adjust_result
     df_adjust = Adjust(df_gdp, "GDP").adjust_result
     ic(df_adjust)
+    df_adjust.to_csv('gdp.csv')
