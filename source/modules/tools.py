@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-09-25 21:06:44
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-07 19:02:55
+# @Last Modified time: 2023-10-12 18:59:03
 """
 @singleton()
 Window(period, df)
@@ -11,13 +11,51 @@ Window(period, df)
 import math
 import sys
 from pathlib import Path
+from random import choice
+from typing import Any, Optional
 
 import numpy as np
+import pandas as pd
 import statsmodels.api as sm
 from icecream import ic
+from tabulate import tabulate
+from termcolor import cprint
 
 ic.configureOutput(prefix="")
 sys.path.append(str(Path.cwd()))
+
+
+def cp(content: Any, color: Optional[str] = None) -> None:
+    """
+    Print colorize text.
+    --------
+
+    Args:
+    --------
+        content (str): Anything you want to print.
+        color (Optional[str]): \n
+        Choose from ["grey", "red", "green", "yellow", "blue", "magenta", "cyan"]. \n
+        Nothing passed in → Random Color.
+
+    Usages:
+    --------
+        >>> cp("Anything you want to print.")
+        >>> cp("Anything you want to print.", color="red")
+    """
+    color_list: list[str] = [
+        "grey",
+        "red",
+        "green",
+        "yellow",
+        "blue",
+        "magenta",
+        "cyan",
+    ]
+    cprint(
+        text=content,
+        color=choice(color_list) if color not in color_list else color,
+        attrs=["bold"],
+    )
 
 
 def singleton(cls):
@@ -92,11 +130,24 @@ class TTest(object):
         result = model.fit(
             cov_type="HAC", cov_kwds={"maxlags": self.max_lags}, weights="bartlett"
         )
-        self.result: dict[str, float] = {
-            "t_value": result.tvalues[0],
-            "p_value": result.pvalues[0],
+        self.result: dict[str, str] = {
+            "t_value": format(result.tvalues[0], ".4f"),
+            "p_value": format(result.pvalues[0], ".4f"),
         }
+
+    def __repr__(self) -> str:
+        return str(
+            tabulate(
+                {
+                    "t-value": [self.result["t_value"]],
+                    "p-value": [self.result["p_value"]],
+                },
+                headers="keys",
+                tablefmt="pretty",
+            )
+        )
 
 
 if __name__ == "__main__":
-    ic(TTest([0.1, 0.11, 0.02, -0.1, -0.11, -0.01]).result)
+    t_test = TTest([0.1, 0.11, 0.02, -0.1, -0.11, -0.01])
+    ic(t_test)

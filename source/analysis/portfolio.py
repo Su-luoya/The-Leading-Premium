@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-10-07 19:03:41
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-07 20:20:02
+# @Last Modified time: 2023-10-10 10:20:30
 
 
 import sys
@@ -97,7 +97,7 @@ if __name__ == "__main__":
     up = UnivariatePortfolio(
         df_test=TestSample(
             is_shift=True,
-            freq="Y",
+            freq="Q",
             cashflow="EBITDA",
             measure="LL_industry",
         ).portfolio_sample()

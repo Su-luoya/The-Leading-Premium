@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-10-07 16:31:00
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-07 19:31:59
+# @Last Modified time: 2023-10-10 10:15:10
 
 
 import sys
@@ -55,6 +55,7 @@ class TestSample(object):
                 [self.df_ll["period"].dt.year, self.df_ll["industry_code"]]
             )[self.ll_column].transform(lambda x: x.iloc[0])
             self.df_ll["period_new"] = self.df_ll["period"] + shift_period
+            # ic(self.df_ll["period"])
             self.df_ll = self.df_ll[self.df_ll["period"] > self.df_ll["period"][1]]
             self.df_ll["period"] = self.df_ll["period_new"]
             self.df_ll = self.df_ll.drop(columns="period_new")

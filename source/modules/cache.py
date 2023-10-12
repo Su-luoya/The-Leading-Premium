@@ -2,58 +2,25 @@
 # @Author: 昵称有六个字
 # @Date:   2023-08-17 09:12:49
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-05 16:06:14
-'''
+# @Last Modified time: 2023-10-12 17:53:36
+"""
 cp() \n
 @Cache(file_path="test.csv", test=False)
-'''
+"""
 
 import sys
 from pathlib import Path
-from random import choice
-from typing import Any, Callable, Optional
+from typing import Callable
 
 import pandas as pd
 from icecream import ic
-from termcolor import cprint
+
 
 ic.configureOutput(prefix="")
 
 sys.path.append(str(Path.cwd()))
 from source.modules.setting import Setting
-
-
-def cp(content: Any, color: Optional[str] = None) -> None:
-    """
-    Print colorize text.
-    --------
-
-    Args:
-    --------
-        content (str): Anything you want to print.
-        color (Optional[str]): \n
-        Choose from ["grey", "red", "green", "yellow", "blue", "magenta", "cyan"]. \n
-        Nothing passed in → Random Color.
-
-    Usages:
-    --------
-        >>> cp("Anything you want to print.")
-        >>> cp("Anything you want to print.", color="red")
-    """
-    color_list: list[str] = [
-        "grey",
-        "red",
-        "green",
-        "yellow",
-        "blue",
-        "magenta",
-        "cyan",
-    ]
-    cprint(
-        text=content,
-        color=choice(color_list) if color not in color_list else color,
-        attrs=["bold"],
-    )
+from source.modules.tools import cp
 
 
 class Cache(object):

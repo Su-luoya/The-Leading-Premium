@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-09-25 20:36:49
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-06 19:53:36
+# @Last Modified time: 2023-10-12 19:00:45
 """
 df_cashflow = get_cashflow()
 """
@@ -251,4 +251,6 @@ def get_cashflow():
 
 if __name__ == "__main__":
     df_cashflow = get_cashflow()
-    ic(df_cashflow)
+    df_cashflow = get_cashflow()
+    ic(get_cashflow())
+    # print(df_cashflow)
