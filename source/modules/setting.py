@@ -2,7 +2,7 @@
 # @Author: 昵称有六个字
 # @Date:   2023-08-17 09:12:59
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-10 10:15:44
+# @Last Modified time: 2023-10-18 20:54:53
 
 
 from icecream import ic
@@ -32,6 +32,10 @@ class Setting(object):
 
     # 2.4 Trade
     trade_path: str = f"{origin_path}/trade"
+    
+    # 2.5 Finance
+    finance_path: str = f"{origin_path}/finance"
+    
 
     # & Sample
     # Sample start year
@@ -76,7 +80,7 @@ class Setting(object):
     # Shift LL rank to pair return data
     shift_rank_period: int = delay_max_period
     # Industry number that lead (lag) portfolio contains
-    lead_group_industry_number: int = 10
+    lead_group_industry_number: int = 9
     lag_group_industry_number: int = 10
 
 

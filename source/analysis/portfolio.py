@@ -2,12 +2,11 @@
 # @Author: 昵称有六个字
 # @Date:   2023-10-07 19:03:41
 # @Last Modified by:   昵称有六个字
-# @Last Modified time: 2023-10-10 10:20:30
+# @Last Modified time: 2023-10-18 18:13:48
 
 
 import sys
 from pathlib import Path
-from time import time
 
 import numpy as np
 import pandas as pd
@@ -16,11 +15,7 @@ from icecream import ic
 ic.configureOutput(prefix="")
 sys.path.append(str(Path.cwd()))
 from source.analysis.sample import TestSample
-from source.data.basic import get_industry_classification
-from source.data.trade import StockReturn
-from source.modules.cache import Cache, cp
-from source.modules.setting import Setting
-from source.modules.tools import TTest, singleton
+from source.modules.tools import TTest
 
 
 class UnivariatePortfolio(object):
@@ -34,7 +29,7 @@ class UnivariatePortfolio(object):
     Args:
     --------
         df_test (pd.DataFrame): Test sample dataframe.
-        columns should be named like ['stock', 'year', 'quarter', 'month', 'portfolio', 'value', 'return']
+        columns should be named like ['stock', 'year', ('quarter'), 'month', 'portfolio', 'value', 'return']
     """
 
     def __init__(self, df_test):
@@ -84,12 +79,12 @@ class UnivariatePortfolio(object):
         t_test = t_test.drop(columns=["test_result"]).reset_index()
         return t_test
 
-    def cumulative_log_excess_returns(self):
+    def cumulative_log_excess_returns(self) -> None:
         self.df_test = self.df_test.apply(lambda x: np.log(x + 1))
-        mean = self.df_test["lead-lag"].mean()
-        std = self.df_test["lead-lag"].std()
-        sharpe = (mean / std) * 12 ** (1 / 2)
-        df_cum = self.df_test.cumsum()
+        mean: float = self.df_test["lead-lag"].mean()
+        std: float = self.df_test["lead-lag"].std()
+        sharpe: float = (mean / std) * 12 ** (1 / 2)
+        df_cum: pd.DataFrame = self.df_test.cumsum()
         ic(mean, std, sharpe, df_cum)
 
 
@@ -99,8 +94,10 @@ if __name__ == "__main__":
             is_shift=True,
             freq="Q",
             cashflow="EBITDA",
-            measure="LL_industry",
-        ).portfolio_sample()
+            measure="LL_average",
+        )
+        .portfolio_sample()
+        .drop(columns=["quarter"])
     )
     t_test = up.t_test()
     up.cumulative_log_excess_returns()
